@@ -1,0 +1,55 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "Level.tmx",
+    "expandedProjectPaths": [
+        "."
+    ],
+    "fileStates": {
+        "": {
+            "scaleInDock": 1,
+            "scaleInEditor": 3
+        },
+        "Level.tmx": {
+            "scale": 1.5,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": 332,
+                "y": 277.99999999999994
+            }
+        },
+        "Level.tmx#tilemap-farm_packed": {
+            "scaleInDock": 1.5,
+            "scaleInEditor": 4
+        },
+        "Level.tmx#tilemap-sweet_packed": {
+            "scaleInDock": 1,
+            "scaleInEditor": 4
+        },
+        "Level.tmx#tilemap_packed": {
+            "scaleInDock": 1.5,
+            "scaleInEditor": 3
+        }
+    },
+    "last.imagePath": "C:/Users/cbrsk/Desktop/School/CMPM120/CosmicCulinaryQuest",
+    "map.height": 25,
+    "map.lastUsedFormat": "tmx",
+    "map.tileHeight": 18,
+    "map.tileWidth": 18,
+    "map.width": 110,
+    "openFiles": [
+        "Level.tmx"
+    ],
+    "project": "Level.tiled-project",
+    "property.type": "bool",
+    "recentFiles": [
+        "Level.tmx"
+    ],
+    "tileset.embedInMap": true,
+    "tileset.tileSize": {
+        "height": 24,
+        "width": 24
+    }
+}
