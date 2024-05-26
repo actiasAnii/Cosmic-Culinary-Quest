@@ -8,14 +8,16 @@ class Platformer extends Phaser.Scene {
         //variables and settings
         //mess around with them
         this.physics.world.gravity.y = 1500;
-        this.SCALE = 2.4;
+        this.physics.world.bounds.width = 3240;
+        this.physics.world.bounds.height = 540;
+        this.SCALE = 2;
     }
 
     create() 
     {
         
         ////////set up map
-        this.map = this.add.tilemap("level", 18, 18, 180, 25);
+        this.map = this.add.tilemap("level", 18, 18, 180, 30);
 
         //add tilesets to map
         // First parameter: name we gave the tileset in Tiled
@@ -45,7 +47,7 @@ class Platformer extends Phaser.Scene {
 
         /////////set up player
         //change to player class in a sec
-        my.sprite.player = new Player(this, 120, 100, "platformer_characters", "tile_0006.png");
+        my.sprite.player = new Player(this, 114, 100, "platformer_characters", "tile_0006.png");
 
         // Enable collision handling
         this.physics.add.collider(my.sprite.player, this.groundLayer);

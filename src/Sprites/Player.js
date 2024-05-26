@@ -7,12 +7,15 @@ constructor(scene, x, y, texture, frame)
         //add sprite to scene
         scene.add.existing(this);
         scene.physics.add.existing(this);
+        this.setScale(0.90);
+
+        this.setPipeline('Pixel');
 
 
         //set initial vars
-        this.ACCELERATION = 300;
+        this.ACCELERATION = 200;
         this.DRAG = 700;
-        this.JUMP_VELOCITY = -600;
+        this.JUMP_VELOCITY = -620;
         this.PARTICLE_VELOCITY;
 
         this.body.setVelocityX(0);
@@ -42,7 +45,7 @@ constructor(scene, x, y, texture, frame)
             {
                 this.setAccelerationX(-this.ACCELERATION);
                 this.resetFlip();
-                //my.sprite.player.anims.play('walk', true);
+                my.sprite.player.anims.play('walk', true);
                 // TODO: add particle following code here
                 //my.vfx.walking.startFollow(my.sprite.player, my.sprite.player.displayWidth/2-5, my.sprite.player.displayHeight/2-10, false);
                 //my.vfx.walking.setParticleSpeed(this.PARTICLE_VELOCITY, 0);
@@ -58,7 +61,7 @@ constructor(scene, x, y, texture, frame)
             {
                 this.setAccelerationX(this.ACCELERATION);
                 this.setFlip(true, false);
-                //my.sprite.player.anims.play('walk', true);
+                my.sprite.player.anims.play('walk', true);
                 // TODO: add particle following code here
                 //my.vfx.walking.startFollow(my.sprite.player, my.sprite.player.displayWidth/2-30, my.sprite.player.displayHeight/2-10, false);
                 //my.vfx.walking.setParticleSpeed(this.PARTICLE_VELOCITY, 0);
@@ -73,16 +76,16 @@ constructor(scene, x, y, texture, frame)
                 // Set acceleration to 0 and have DRAG take over
                 this.setAccelerationX(0);
                 this.setDragX(this.DRAG);
-                //my.sprite.player.anims.play('idle');
+                my.sprite.player.anims.play('idle');
                 //my.vfx.walking.stop();
             }
 
         //handle player jumping
 
-        //if(!my.sprite.player.body.blocked.down) //landing
-            //{
-            //my.sprite.player.anims.play('jump');
-            //}
+        if(!my.sprite.player.body.blocked.down)
+            {
+            my.sprite.player.anims.play('jump');
+            }
         if(this.body.blocked.down && Phaser.Input.Keyboard.JustDown(this.wKey)) 
             {
                 this.body.setVelocityY(this.JUMP_VELOCITY);
