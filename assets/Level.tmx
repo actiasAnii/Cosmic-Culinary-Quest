@@ -402,7 +402,7 @@
   </tile>
   <tile id="139">
    <properties>
-    <property name="collides" type="bool" value="true"/>
+    <property name="collides" type="bool" value="false"/>
    </properties>
   </tile>
   <tile id="140">
@@ -839,7 +839,13 @@
    </properties>
   </tile>
  </tileset>
- <layer id="5" name="Objects-placement" width="180" height="25">
+ <objectgroup id="7" name="Respawns">
+  <object id="95" name="respawn" gid="47" x="755.667" y="90.3333" width="18" height="18"/>
+  <object id="97" name="respawn" gid="47" x="1169.67" y="307" width="18" height="18"/>
+  <object id="99" name="spawn" gid="47" x="108.583" y="396.083" width="18" height="18"/>
+  <object id="100" name="respawn" gid="47" x="2142.33" y="415" width="18" height="18"/>
+ </objectgroup>
+ <layer id="5" name="Objects-Placement" width="180" height="25">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,269,269,0,0,0,0,0,0,0,0,0,0,254,254,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,269,269,269,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -960,12 +966,6 @@
   <object id="92" name="corn" gid="240" x="2717.88" y="35.875" width="18" height="18"/>
   <object id="93" name="corn" gid="240" x="2736.13" y="36.125" width="18" height="18"/>
   <object id="94" name="pumpkin" gid="185" x="3186.09" y="72.0909" width="18" height="18"/>
- </objectgroup>
- <objectgroup id="7" name="Respawns">
-  <object id="95" name="respawn" gid="47" x="755.667" y="90.3333" width="18" height="18"/>
-  <object id="97" name="respawn" gid="47" x="1169.67" y="307" width="18" height="18"/>
-  <object id="99" name="spawn" gid="47" x="108.583" y="396.083" width="18" height="18"/>
-  <object id="100" name="respawn" gid="47" x="2142.33" y="415" width="18" height="18"/>
  </objectgroup>
  <layer id="4" name="Ground-n-Platforms" width="180" height="25">
   <data encoding="csv">

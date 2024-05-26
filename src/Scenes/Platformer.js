@@ -7,21 +7,12 @@ class Platformer extends Phaser.Scene {
     {
         //variables and settings
         //mess around with them
-        this.ACCELERATION = 400;
-        this.DRAG = 700;
         this.physics.world.gravity.y = 1500;
-        this.POWERUP_DURATION = 1500;
-        this.JUMP_VELOCITY = -600;
+        this.SCALE = 2.4;
     }
 
     create() 
     {
-
-        ////////create keys for input
-        this.aKey = this.input.keyboard.addKey('A');
-        this.dKey = this.input.keyboard.addKey('D');
-        this.wKey = this.input.keyboard.addKey('W');
-        
         
         ////////set up map
         this.map = this.add.tilemap("level", 18, 18, 180, 25);
@@ -33,9 +24,9 @@ class Platformer extends Phaser.Scene {
         this.farm_tileset = this.map.addTilesetImage("tilemap-farm_packed", "farm_tiles");
 
         //create layers
+        this.placementsLayer = this.map.createLayer("Objects-Placement", [this.general_tileset, this.farm_tileset], 0, 0);
         this.groundLayer = this.map.createLayer("Ground-n-Platforms", [this.general_tileset, this.farm_tileset], 0, 0);
         this.decorationLayer = this.map.createLayer("Decoration", [this.general_tileset, this.farm_tileset], 0, 0);
-        this.objectPlacementLayer = this.map.createLayer("Object-Placement", [this.general_tileset, this.farm_tileset], 0, 0 );
 
         //make ground layer collidable
         this.groundLayer.setCollisionByProperty({
@@ -54,8 +45,7 @@ class Platformer extends Phaser.Scene {
 
         /////////set up player
         //change to player class in a sec
-        my.sprite.player = this.physics.add.sprite(100, 100, "platformer_characters", "tile_0006.png");
-        my.sprite.player.setCollideWorldBounds(true);
+        my.sprite.player = new Player(this, 120, 100, "platformer_characters", "tile_0006.png");
 
         // Enable collision handling
         this.physics.add.collider(my.sprite.player, this.groundLayer);
@@ -70,9 +60,9 @@ class Platformer extends Phaser.Scene {
         //create camera
         this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
          //add an offset here if i want to make camera move a bit ahead of player
-        this.cameras.main.startFollow(my.sprite.player, true, 0.25, 0.30); // (target, [,roundPixels][,lerpX][,lerpY]) //add an offset here if i want to make camera move a bit ahead of player
+        this.cameras.main.startFollow(my.sprite.player, true, 0.25, 0.25); // (target, [,roundPixels][,lerpX][,lerpY]) //add an offset here if i want to make camera move a bit ahead of player
         this.cameras.main.setDeadzone(50, 50);
-        this.cameras.main.setZoom(2.1);
+        this.cameras.main.setZoom(this.SCALE);
 
 
         //set up display text
@@ -89,7 +79,8 @@ class Platformer extends Phaser.Scene {
 
     update() 
     {
-        //call update on player
+        //call update on player to handle player behavior
+        my.sprite.player.update();
 
         //handle respawning
 
