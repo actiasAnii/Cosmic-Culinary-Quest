@@ -109,7 +109,6 @@ class Platformer extends Phaser.Scene {
             "radish": 30,
             "carrot": 35
           };
-          //my.pointVals = [10, 15, 20, 25, 30, 35];
 
         //create pumpkin
         this.pumpkin = this.map.createFromObjects("Objects", { //create
@@ -141,14 +140,15 @@ class Platformer extends Phaser.Scene {
 
         //set up display text
         this.score = 0;
-        my.scoreDisplay = this.add.bitmapText(390, 240, "thick", ("00000" + this.score).slice(-5)).setOrigin(1).setScale(2.5).setLetterSpacing(1);
+        my.scoreDisplay = this.add.bitmapText(390, 230, "thick", ("00000" + this.score)
+        .slice(-5)).setOrigin(1).setScale(2.5).setLetterSpacing(1);
         my.scoreDisplay.setScrollFactor(0);
 
         //change forEach to get children
         for (let collectibleGroup of my.collectibles.getChildren()) {
                 this.physics.add.overlap(my.sprite.player, collectibleGroup, (player, collectible) => {
                     console.log("item collection detected");
-                    this.score += my.pointVals[1]; //handle varying point vals not working
+                    this.score += my.pointVals[collectible.name]; //handle varying point vals not working
                     //update score text
                     my.scoreDisplay.setText(("00000" + this.score).slice(-5));
                     collectible.destroy(); //remove coin on overlap
