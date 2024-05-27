@@ -39,14 +39,73 @@ class Platformer extends Phaser.Scene {
         this.skyBackground = this.add.tileSprite(0, -85, this.map.widthInPixels, this.map.heightInPixels, 'background');
         this.skyBackground.setOrigin(0, 0).setDepth(-100).setScale(4).setScrollFactor(0.1, 1);
 
-        /////////create objects and group them
 
+
+
+        /////////create objects and group them
+        my.collectibles = this.add.group(); //initialize phaser group of all collectibles
+
+        //flowers
+        this.flowers = this.map.createFromObjects("Objects", { //create
+            name: "flower",
+            key: "farm_sheet",
+            frame: 20
+        });
+        this.physics.world.enable(this.flowers, Phaser.Physics.Arcade.STATIC_BODY); //enable physics
+        my.flowerGroup = this.add.group(this.flowers); //add to a group
+
+        //wheat
+        this.wheats = this.map.createFromObjects("Objects", { //create
+            name: "wheat",
+            key: "farm_sheet",
+            frame: 58
+        });
+        this.physics.world.enable(this.wheats, Phaser.Physics.Arcade.STATIC_BODY); //enable physics
+        my.wheatGroup = this.add.group(this.wheat); //add to a group
+
+        //radishes
+        this.radishes = this.map.createFromObjects("Objects", { //create
+            name: "radish",
+            key: "farm_sheet",
+            frame: 42
+        });
+        this.physics.world.enable(this.radishes, Phaser.Physics.Arcade.STATIC_BODY); //enable physics
+        my.radishGroup = this.add.group(this.radishes); //add to a group
+
+        //carrots
+        this.carrots = this.map.createFromObjects("Objects", { //create
+            name: "carrot",
+            key: "farm_sheet",
+            frame: 56
+        });
+        this.physics.world.enable(this.carrots, Phaser.Physics.Arcade.STATIC_BODY); //enable physics
+        my.carrotGroup = this.add.group(this.carrots); //add to a group
+
+        //tomatoes
+        this.tomatoes = this.map.createFromObjects("Objects", { //create
+            name: "tomato",
+            key: "farm_sheet",
+            frame: 57
+        });
+        this.physics.world.enable(this.tomatoes, Phaser.Physics.Arcade.STATIC_BODY); //enable physics
+        my.tomatoGroup = this.add.group(this.tomatoes); //add to a group
+
+        //corn
+        this.corn = this.map.createFromObjects("Objects", { //create
+            name: "corn",
+            key: "farm_sheet",
+            frame: 59
+        });
+        this.physics.world.enable(this.corn, Phaser.Physics.Arcade.STATIC_BODY); //enable physics
+        my.cornGroup = this.add.group(this.corn); //add to a group
+
+        //add all to collectible group
+        my.collectibles.addMultiple([my.flowerGroup, my.wheatGroup, my.radishGroup, my.carrotGroup, my.tomatoGroup, my.cornGroup]);
 
         //set spawn point
 
         //create camera
         this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
-
 
         /////////set up player
         //change to player class in a sec
@@ -68,6 +127,8 @@ class Platformer extends Phaser.Scene {
 
 
         //set up display text
+        my.scoreDisplay = this.add.bitmapText(390, 240, "thick", "00000").setOrigin(1).setScale(2.5).setLetterSpacing(1);
+        my.scoreDisplay.setScrollFactor(0);
 
 
 
@@ -83,7 +144,6 @@ class Platformer extends Phaser.Scene {
     {
         //call update on player to handle player behavior
         my.sprite.player.update();
-
 
         //handle respawning
 

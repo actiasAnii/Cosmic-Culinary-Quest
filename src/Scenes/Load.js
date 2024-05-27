@@ -40,6 +40,7 @@ class Load extends Phaser.Scene {
         this.load.image("background", "background.png");
 
         //load font
+        this.load.bitmapFont("thick", "thick_8x8.png", "thick_8x8.xml");
 
         //load audio
 

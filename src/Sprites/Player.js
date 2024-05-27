@@ -66,7 +66,7 @@ constructor(scene, x, y, texture, frame)
         //tween manager for squash and stretch
         this.tweenManager = scene.tweens;
         //was airborne?
-        this.wasAirborne = false;
+        this.wasAirborne = true;
 
     }
 
@@ -75,17 +75,34 @@ constructor(scene, x, y, texture, frame)
     {
         this.tweenManager.add({
             targets: this,
-            scaleX: 0.5,
-            scaleY: 1.2,
+            scaleX: 0.5, //squash horizontally when landing
+            scaleY: 1.5, //stretch vertically when landing
             duration: 50, 
-            ease: 'Sine',
+            ease: 'Linear',
             yoyo: true,
             onComplete: ()=> {
-                this.setScale(0.9, 0.9);
+                this.setScale(0.9, 0.9); //reset scale to original size after animation
             }
         });
 
     }  
+
+    stretchAndSquash() {
+        this.tweenManager.add({
+            targets: this,
+            scaleX: 1.2, //stretch horizontally when landing
+            scaleY: 0.5, //squash vertically when landing
+            duration: 50, 
+            ease: 'Linear',
+            yoyo: true,
+            onComplete: () => {
+                this.setScale(0.9, 0.9); //reset scale to original size after animation
+            }
+        });
+    }
+
+
+
     update()
     {
         //handle player walking
@@ -121,17 +138,20 @@ constructor(scene, x, y, texture, frame)
             my.sprite.player.anims.play('jump');
             this.walk.stop();
             this.jump.start();
-            }
-        if(this.body.blocked.down && Phaser.Input.Keyboard.JustDown(this.wKey)) 
-            {
-                this.body.setVelocityY(this.JUMP_VELOCITY);
-                this.wasAirborne = true;
-            }
+            } 
+
         if(this.wasAirborne && this.body.blocked.down)
             {
                 this.jump.stop();
-                this.squashAndStretch();
+                this.stretchAndSquash();
                 this.wasAirborne = false;
+            }
+
+        if(this.body.blocked.down && Phaser.Input.Keyboard.JustDown(this.wKey)) 
+            {
+                this.body.setVelocityY(this.JUMP_VELOCITY);
+                this.squashAndStretch();
+                this.wasAirborne = true;
             }
 
         //handle health
