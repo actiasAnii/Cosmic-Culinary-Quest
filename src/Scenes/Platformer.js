@@ -36,7 +36,7 @@ class Platformer extends Phaser.Scene {
         });
 
         //set up background
-        this.skyBackground = this.add.tileSprite(0, -70, this.map.widthInPixels, this.map.heightInPixels, 'background');
+        this.skyBackground = this.add.tileSprite(0, -85, this.map.widthInPixels, this.map.heightInPixels, 'background');
         this.skyBackground.setOrigin(0, 0).setDepth(-100).setScale(4).setScrollFactor(0.1, 1);
 
         /////////create objects and group them

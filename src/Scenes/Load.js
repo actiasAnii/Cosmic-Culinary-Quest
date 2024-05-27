@@ -31,6 +31,10 @@ class Load extends Phaser.Scene {
         //multiatlas ripped from improved platformer
         this.load.multiatlas("kenny-particles", "kenny-particles.json");
 
+        //load the rotates particles
+        this.load.image("trace1", "trace_06_rotated.png");
+        this.load.image("trace2", "trace_07_rotated.png");
+
         //load any unique assets
         //load background
         this.load.image("background", "background.png");
