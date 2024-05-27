@@ -27,7 +27,8 @@ let config = {
             gravity: {
                 x: 0,
                 y: 0
-            }
+            },
+            fixedStep: false
         }
     },
     width: 1080,

@@ -35,19 +35,27 @@ class Platformer extends Phaser.Scene {
             collides: true
         });
 
-
         //set up background
-
+        this.skyBackground = this.add.tileSprite(0, -70, this.map.widthInPixels, this.map.heightInPixels, 'background');
+        this.skyBackground.setOrigin(0, 0).setDepth(-100).setScale(4).setScrollFactor(0.1, 1);
 
         /////////create objects and group them
 
 
         //set spawn point
 
+        //create camera
+        this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
+
 
         /////////set up player
         //change to player class in a sec
         my.sprite.player = new Player(this, 114, 100, "platformer_characters", "tile_0006.png");
+
+        //adjust camera settings
+        this.cameras.main.startFollow(my.sprite.player, true, 0.25, 0.1); // (target, [,roundPixels][,lerpX][,lerpY])
+        this.cameras.main.setDeadzone(50, 50);
+        this.cameras.main.setZoom(this.SCALE);
 
         // Enable collision handling
         this.physics.add.collider(my.sprite.player, this.groundLayer);
@@ -57,14 +65,6 @@ class Platformer extends Phaser.Scene {
 
 
         //all collision handling
-
-
-        //create camera
-        this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
-         //add an offset here if i want to make camera move a bit ahead of player
-        this.cameras.main.startFollow(my.sprite.player, true, 0.25, 0.25); // (target, [,roundPixels][,lerpX][,lerpY]) //add an offset here if i want to make camera move a bit ahead of player
-        this.cameras.main.setDeadzone(50, 50);
-        this.cameras.main.setZoom(this.SCALE);
 
 
         //set up display text
@@ -84,9 +84,12 @@ class Platformer extends Phaser.Scene {
         //call update on player to handle player behavior
         my.sprite.player.update();
 
+
         //handle respawning
 
         //end condition
+
+
 
     }
 
