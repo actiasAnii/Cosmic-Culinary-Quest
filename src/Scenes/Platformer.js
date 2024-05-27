@@ -61,7 +61,7 @@ class Platformer extends Phaser.Scene {
             frame: 58
         });
         this.physics.world.enable(this.wheats, Phaser.Physics.Arcade.STATIC_BODY); //enable physics
-        my.wheatGroup = this.add.group(this.wheat); //add to a group
+        my.wheatGroup = this.add.group(this.wheats); //add to a group
 
         //radishes
         this.radishes = this.map.createFromObjects("Objects", { //create
@@ -99,37 +99,61 @@ class Platformer extends Phaser.Scene {
         this.physics.world.enable(this.corn, Phaser.Physics.Arcade.STATIC_BODY); //enable physics
         my.cornGroup = this.add.group(this.corn); //add to a group
 
-        //add all to collectible group
-        my.collectibles.addMultiple([my.flowerGroup, my.wheatGroup, my.radishGroup, my.carrotGroup, my.tomatoGroup, my.cornGroup]);
+        //add all score objects to collectible group
+        my.collectibles.addMultiple([my.wheatGroup, my.flowerGroup, my.tomatoGroup, my.cornGroup, my.radishGroup, my.carrotGroup]);
+        my.pointVals = {
+            "wheat": 10,
+            "flower": 15,
+            "tomato": 20,
+            "corn": 25,
+            "radish": 30,
+            "carrot": 35
+          };
+          //my.pointVals = [10, 15, 20, 25, 30, 35];
+
+        //create pumpkin
+        this.pumpkin = this.map.createFromObjects("Objects", { //create
+            name: "pumpkin",
+            key: "farm_sheet",
+            frame: 4
+        });
+
+        this.physics.world.enable(this.pumpkin, Phaser.Physics.Arcade.STATIC_BODY);
 
         //set spawn point
+        this.spawnPoint = this.map.findObject("Respawns", obj => obj.name === "spawn");
 
         //create camera
         this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
 
         /////////set up player
         //change to player class in a sec
-        my.sprite.player = new Player(this, 114, 100, "platformer_characters", "tile_0006.png");
+        my.sprite.player = new Player(this, this.spawnPoint.x, this.spawnPoint.y - 150, "platformer_characters", "tile_0006.png");
 
         //adjust camera settings
         this.cameras.main.startFollow(my.sprite.player, true, 0.25, 0.1); // (target, [,roundPixels][,lerpX][,lerpY])
         this.cameras.main.setDeadzone(50, 50);
         this.cameras.main.setZoom(this.SCALE);
 
-        // Enable collision handling
+        //ground collision handling
         this.physics.add.collider(my.sprite.player, this.groundLayer);
 
 
-        //enable arcade physics
-
-
-        //all collision handling
-
-
         //set up display text
-        my.scoreDisplay = this.add.bitmapText(390, 240, "thick", "00000").setOrigin(1).setScale(2.5).setLetterSpacing(1);
+        this.score = 0;
+        my.scoreDisplay = this.add.bitmapText(390, 240, "thick", ("00000" + this.score).slice(-5)).setOrigin(1).setScale(2.5).setLetterSpacing(1);
         my.scoreDisplay.setScrollFactor(0);
 
+        //change forEach to get children
+        for (let collectibleGroup of my.collectibles.getChildren()) {
+                this.physics.add.overlap(my.sprite.player, collectibleGroup, (player, collectible) => {
+                    console.log("item collection detected");
+                    this.score += my.pointVals[1]; //handle varying point vals not working
+                    //update score text
+                    my.scoreDisplay.setText(("00000" + this.score).slice(-5));
+                    collectible.destroy(); //remove coin on overlap
+                });
+            }
 
 
         //debug listener

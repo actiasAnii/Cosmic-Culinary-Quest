@@ -40,11 +40,11 @@ constructor(scene, x, y, texture, frame)
 
         //create walking vfx
         this.walk = scene.add.particles(0, 0, "trace1", { 
-            scale: {start: 0.05, end: 0.01, random: true},
+            scale: {start: 0.04, end: 0.01, random: true},
             lifespan: 450,
             blendMode: 'ADD',
             alpha: {start: 0.1, end: 0.01},
-            quantity: 15
+            quantity: 20
         });
         this.walk.setDepth(-10);
         this.walk.startFollow(this);
