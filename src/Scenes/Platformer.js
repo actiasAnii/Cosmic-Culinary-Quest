@@ -13,6 +13,10 @@ class Platformer extends Phaser.Scene {
         this.physics.world.bounds.width = 3240;
         this.physics.world.bounds.height = 540;
         this.SCALE = 2;
+
+        //for health bar
+        my.sprite.fullHearts = [];
+        my.sprite.emptyHearts = [];
     }
 
     create() 
@@ -47,6 +51,29 @@ class Platformer extends Phaser.Scene {
         //set up background
         this.skyBackground = this.add.tileSprite(0, -85, this.map.widthInPixels, this.map.heightInPixels, 'background');
         this.skyBackground.setOrigin(0, 0).setDepth(-100).setScale(4).setScrollFactor(0.1, 1);
+
+        //create health bar
+        for (let i = 0; i < 3; i++) {
+            //new sprite for both empty and full arrays
+            let fullHeart = this.add.sprite(0, 222, 'heartFull').setOrigin(0).setScale(1.2);
+            let emptyHeart = this.add.sprite(0, 222, 'heartEmpty').setOrigin(0).setScale(1.2);
+
+            fullHeart.visible = true; //start with full hearts visible
+            emptyHeart.visible = false;
+
+            //push sprites to corresponding arrays
+            my.sprite.fullHearts.push(fullHeart);
+            my.sprite.emptyHearts.push(emptyHeart);
+
+            //position the hearts horizontally
+            const offsetX = i * (fullHeart.displayWidth + 1) + 280; //setting x val here
+            fullHeart.x = offsetX;
+            emptyHeart.x = offsetX;
+
+             // Set scroll factor to zero
+            fullHeart.setScrollFactor(0);
+            emptyHeart.setScrollFactor(0);
+        }
 
 
         /////////create objects and group them
@@ -205,9 +232,25 @@ class Platformer extends Phaser.Scene {
     DEATH()
     { 
         return (player) => {
+            //adjust player position
             player.body.x = this.currRespawnX;
             player.body.y = this.currRespawnY - 150;
+            //make player stop moving
             player.body.setVelocity(0, 0);
+            //reduce player health
+            player.HEALTH--;
+            if (player.HEALTH <= 0)
+                {
+                    this.scene.start("endLose");      
+                }
+
+            for (let i = 0; i < 3; i++) 
+                {
+
+                    my.sprite.fullHearts[i].visible = i < player.HEALTH; //if i is less than current player health, full heart is visible
+                    my.sprite.emptyHearts[i].visible = i >= player.HEALTH; //if i is greater than current player health, empty heart is visible
+                }
+
         };
     }
 

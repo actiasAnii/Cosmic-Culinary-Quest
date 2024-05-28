@@ -22,7 +22,7 @@ constructor(scene, x, y, texture, frame)
         this.DRAG = 700;
         this.JUMP_VELOCITY = -600;
         //for particles
-        this.PARTICLE_VELOCITY;
+        this.HEALTH = 3;
 
         this.body.setVelocityX(0);
         this.body.setVelocityY(0);

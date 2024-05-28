@@ -33,7 +33,7 @@ let config = {
     },
     width: 1080,
     height: 750, //adjust back when on pc
-    scene: [Load, Platformer, EndWin]
+    scene: [Load, Platformer, EndWin, EndLose]
 }
 
 var cursors;

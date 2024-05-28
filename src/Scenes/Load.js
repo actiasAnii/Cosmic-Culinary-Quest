@@ -35,7 +35,10 @@ class Load extends Phaser.Scene {
         this.load.image("trace1", "trace_06_rotated.png");
         this.load.image("trace2", "trace_07_rotated.png");
 
-        //load any unique assets
+        //load health bar
+        this.load.image("heartEmpty", "heart_empty.png");
+        this.load.image("heartFull", "heart_full.png");
+
         //load background
         this.load.image("background", "background.png");
 
