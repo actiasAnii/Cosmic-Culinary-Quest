@@ -19,6 +19,12 @@ class Platformer extends Phaser.Scene {
         my.sprite.emptyHearts = [];
     }
 
+    preload()
+    {
+        //load the plugin for animation
+        this.load.scenePlugin('AnimatedTiles', './lib/AnimatedTiles.js', 'animatedTiles', 'animatedTiles');
+    }
+
     create() 
     {
 
@@ -86,6 +92,23 @@ class Platformer extends Phaser.Scene {
             frame: 20
         });
         this.physics.world.enable(this.flowers, Phaser.Physics.Arcade.STATIC_BODY); //enable physics
+        //play flower animation
+        this.flowers.forEach(flower => {
+            this.tweens.add({
+                targets: flower,
+                scaleY: 1.1, //stretch vertically just a tiny bit to look like blooming
+                angle: 1.5,
+                duration: 1000, 
+                ease: 'Sine.EaseInOut',
+                yoyo: true,
+                repeat: -1,
+                onComplete: ()=> {
+                    flower.setScale(1, 1); //reset scale to original size after animation
+                }
+            });
+
+        });
+
         my.flowerGroup = this.add.group(this.flowers); //add to a group
 
         //wheat
@@ -95,6 +118,21 @@ class Platformer extends Phaser.Scene {
             frame: 58
         });
         this.physics.world.enable(this.wheats, Phaser.Physics.Arcade.STATIC_BODY); //enable physics
+        this.wheats.forEach(wheat => {
+            this.tweens.add({
+                targets: wheat,
+                scaleY: 1.2, //stretch
+                angle: 3,
+                duration: 600, 
+                ease: 'Sine.EaseInOut',
+                yoyo: true,
+                repeat: -1,
+                onComplete: ()=> {
+                    wheat.setScale(1, 1); //reset scale to original size after animation
+                }
+            });
+
+        });
         my.wheatGroup = this.add.group(this.wheats); //add to a group
 
         //radishes
@@ -104,6 +142,11 @@ class Platformer extends Phaser.Scene {
             frame: 42
         });
         this.physics.world.enable(this.radishes, Phaser.Physics.Arcade.STATIC_BODY); //enable physics
+
+        //play radish animation
+        this.radishes.forEach(radish => {
+            radish.anims.play('radishPeep');
+        });
         my.radishGroup = this.add.group(this.radishes); //add to a group
 
         //carrots
@@ -113,6 +156,12 @@ class Platformer extends Phaser.Scene {
             frame: 56
         });
         this.physics.world.enable(this.carrots, Phaser.Physics.Arcade.STATIC_BODY); //enable physics
+
+        //play carrot animation
+        this.carrots.forEach(carrot => {
+            carrot.anims.play('carrotPeep');
+        });
+
         my.carrotGroup = this.add.group(this.carrots); //add to a group
 
         //tomatoes
@@ -122,6 +171,22 @@ class Platformer extends Phaser.Scene {
             frame: 57
         });
         this.physics.world.enable(this.tomatoes, Phaser.Physics.Arcade.STATIC_BODY); //enable physics
+        //tomato animation
+        this.tomatoes.forEach(tomato => {
+            this.tweens.add({
+                targets: tomato,
+                scaleX: 1.2,
+                scaleY: 0.9,
+                duration: 650, 
+                ease: 'Sine.EaseInOut',
+                yoyo: true,
+                repeat: -1,
+                onComplete: ()=> {
+                    tomato.setScale(1, 1); //reset scale to original size after animation
+                }
+            });
+
+        });
         my.tomatoGroup = this.add.group(this.tomatoes); //add to a group
 
         //corn
@@ -131,6 +196,22 @@ class Platformer extends Phaser.Scene {
             frame: 59
         });
         this.physics.world.enable(this.corn, Phaser.Physics.Arcade.STATIC_BODY); //enable physics
+        //corn animation
+        this.corn.forEach(corn => {
+            this.tweens.add({
+                targets: corn,
+                scaleX: 1.25,
+                scaleY: 1.2, //stretch
+                duration: 1200, 
+                ease: 'Sine.EaseInOut',
+                yoyo: true,
+                repeat: -1,
+                onComplete: ()=> {
+                    corn.setScale(1, 1); //reset scale to original size after animation
+                }
+            });
+
+        });
         my.cornGroup = this.add.group(this.corn); //add to a group
 
         //add all score objects to collectible group
@@ -156,12 +237,20 @@ class Platformer extends Phaser.Scene {
         this.spawnPoint = this.map.findObject("Respawns", obj => obj.name === "spawn");
         this.currRespawnX = this.spawnPoint.x;
         this.currRespawnY = this.spawnPoint.y;
+
+
         //create group of all respawn points
         this.respawns = this.map.createFromObjects("Respawns", {
             name: "respawn",
             key: "general_sheet",
             frame: 111
         });
+
+        //play flag wave animation
+        this.respawns.forEach(respawn => {
+            respawn.anims.play('flagWave');
+            });
+
         this.physics.world.enable(this.respawns, Phaser.Physics.Arcade.STATIC_BODY); //enable physics
 
         //create camera
@@ -191,13 +280,11 @@ class Platformer extends Phaser.Scene {
 
          //handle collision for respawn points
          this.physics.add.overlap(my.sprite.player, this.respawns, (player, respawnPoint) => {
-            // Play a sound effect
 
-            //debug
-            console.log("Checkpoint reached!");
-            console.log("Respawn point coordinates:", respawnPoint.x, respawnPoint.y);
             this.currRespawnX = respawnPoint.x;
             this.currRespawnY = respawnPoint.y;
+            this.sound.play("soundCheckpoint", {volume: 0.08});
+            this.physics.world.disable(respawnPoint, Phaser.Physics.Arcade.STATIC_BODY); //disable physics so sound doesnt play again
         });
 
 
@@ -209,12 +296,13 @@ class Platformer extends Phaser.Scene {
                     myScore += my.pointVals[collectible.name]; //handle varying point vals
                     my.scoreDisplay.setText(("00000" + myScore).slice(-5));  //update score text
                     collectible.destroy(); //remove collectivle on overlap
+                    this.sound.play("soundCollect", {volume: 0.05});
                 });
             }
 
         //handle end of game scenario
         this.physics.add.overlap(my.sprite.player, this.pumpkin, (player, pumpkin) => {
-            console.log("end scene started!")
+            this.sound.play("soundWin", {volume: 0.08});
             this.scene.start("endWin");
         });
 
@@ -227,6 +315,8 @@ class Platformer extends Phaser.Scene {
 
         //start game
         this.init_game();
+
+        this.animatedTiles.init(this.map);
     }
 
     DEATH()
@@ -239,8 +329,11 @@ class Platformer extends Phaser.Scene {
             player.body.setVelocity(0, 0);
             //reduce player health
             player.HEALTH--;
+            this.sound.play("soundDrown", {volume: 0.08});
+
             if (player.HEALTH <= 0)
                 {
+                    this.sound.play("soundLose", {volume: 0.08});
                     this.scene.start("endLose");      
                 }
 

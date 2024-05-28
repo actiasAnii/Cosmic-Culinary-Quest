@@ -4,6 +4,8 @@ class Load extends Phaser.Scene {
     }
 
     preload() {
+
+        //set path for rest of assets
         this.load.setPath("./assets/");
 
         //load characters spritesheet
@@ -46,14 +48,23 @@ class Load extends Phaser.Scene {
         this.load.bitmapFont("thick", "thick_8x8.png", "thick_8x8.xml");
 
         //load audio
-        
-
+        this.load.audio("soundJump", "laserSmall_002.ogg"); //sound for jumping
+        this.load.audio("soundLand", "footstep_grass_001.ogg"); //sound for landing after a jump/fall
+        this.load.audio("soundWalk1", "footstep_grass_003.ogg"); //sound for walking
+        this.load.audio("soundWalk2", "footstep_grass_002.ogg"); //sound for walking
+        this.load.audio("soundCollect", "jingles_NES09.ogg"); //sound for accquiring collectibles
+        this.load.audio("soundDrown", "jingles_NES11.ogg"); //sound for drowning/losing health
+        this.load.audio("soundCheckpoint", "jingles_NES03.ogg"); //sound for setting a new checkpoint
+        this.load.audio("soundWin", "jingles_NES12.ogg"); //sound for transitioning to win screen
+        this.load.audio("soundLose", "jingles_NES00.ogg"); //sound for transitioning to lose screen
+    
 
     }
 
     create() {
         //create animations
 
+        /////player animations
         this.anims.create({
             key: 'walk',
             frames: this.anims.generateFrameNames('platformer_characters', {
@@ -84,9 +95,45 @@ class Load extends Phaser.Scene {
             ],
         });
 
+
+        ////object animations
+        this.anims.create({
+            key: 'flagWave',
+            frames: [
+                { key: 'general_sheet', frame: 111 },
+                { key: 'general_sheet', frame: 112 }
+            ],
+            frameRate: 4, 
+            repeat: -1 // Repeat indefinitely
+        });
+
+        this.anims.create({
+            key: 'radishPeep',
+            frames: [
+                { key: 'farm_sheet', frame: 42 },
+                { key: 'farm_sheet', frame: 43 }
+            ],
+            frameRate: 1, 
+            repeat: -1 // Repeat indefinitely
+        });
+
+        this.anims.create({
+            key: 'carrotPeep',
+            frames: [
+                { key: 'farm_sheet', frame: 56 },
+                { key: 'farm_sheet', frame: 72 }
+            ],
+            frameRate: 2, 
+            repeat: -1 // Repeat indefinitely
+        });
+
+
+
         //then pass to the next scene
         this.scene.start("somethingFresh");
     }
+
+
 
     //never reached
     update() {

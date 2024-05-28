@@ -36,7 +36,6 @@ let config = {
     scene: [Load, Platformer, EndWin, EndLose]
 }
 
-var cursors;
 const SCALE = 2.0;
 var my = {sprite: {}, text: {}, vfx: {}};
 

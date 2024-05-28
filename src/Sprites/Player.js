@@ -63,22 +63,27 @@ constructor(scene, x, y, texture, frame)
         this.jump.startFollow(this);
         this.jump.stop();
 
-        //tween manager for squash and stretch
+        //tween manager for squash and stretch anims
         this.tweenManager = scene.tweens;
         //was airborne?
         this.wasAirborne = true;
 
+        //sound delay for walking
+        this.lastWalkSoundTime = 0;
+        this.walkSoundDelay = 300;
+        this.currentWalkSound = "soundWalk2";
+
     }
 
     //additional helper functions
-    squashAndStretch()
+    stretchAndSquash()
     {
         this.tweenManager.add({
             targets: this,
-            scaleX: 0.5, //squash horizontally when landing
-            scaleY: 1.5, //stretch vertically when landing
+            scaleX: 0.5, //get narrower
+            scaleY: 1.5, //stretch vertically when jumping
             duration: 50, 
-            ease: 'Linear',
+            ease: 'Sine.EaseInOut',
             yoyo: true,
             onComplete: ()=> {
                 this.setScale(0.9, 0.9); //reset scale to original size after animation
@@ -87,13 +92,13 @@ constructor(scene, x, y, texture, frame)
 
     }  
 
-    stretchAndSquash() {
+    squashAndStretch() {
         this.tweenManager.add({
             targets: this,
-            scaleX: 1.2, //stretch horizontally when landing
-            scaleY: 0.5, //squash vertically when landing
+            scaleX: 1.4, //stretch horizontally when landing
+            scaleY: 0.5, //get flatter
             duration: 50, 
-            ease: 'Linear',
+            ease: 'Sine.EaseInOut',
             yoyo: true,
             onComplete: () => {
                 this.setScale(0.9, 0.9); //reset scale to original size after animation
@@ -109,6 +114,35 @@ constructor(scene, x, y, texture, frame)
 
     }
 
+    /*playWalkSound()
+    {
+        const currentTime = this.scene.time.now;
+        if (currentTime - this.lastWalkSoundTime > this.walkSoundDelay && this.body.blocked.down) 
+            {
+                this.scene.sound.play("soundWalk1", {volume: 0.05});
+                this.lastWalkSoundTime = currentTime;
+            }
+    }*/
+
+    playWalkSound() {
+        const currentTime = this.scene.time.now;
+    
+        // Check if enough time has passed since the last walking sound
+        if (currentTime - this.lastWalkSoundTime > this.walkSoundDelay && this.body.blocked.down) {
+            //play the walking sound based on the sound last played
+            if (this.currentWalkSound === "soundWalk2") {
+                this.scene.sound.play("soundWalk1", { volume: 0.05 });
+                this.currentWalkSound = "soundWalk1";
+            } else {
+                this.scene.sound.play("soundWalk2", { volume: 0.05 });
+                this.currentWalkSound = "soundWalk2";
+            }
+    
+            //update the last walk sound time to the current time
+            this.lastWalkSoundTime = currentTime;
+        }
+    }
+
     update()
     {
         //handle player walking
@@ -119,6 +153,7 @@ constructor(scene, x, y, texture, frame)
                 my.sprite.player.anims.play('walk', true);
                 this.walk.startFollow(this, 10, 0);
                 this.walk.start();
+                this.playWalkSound();
             }
         
          else if (this.dKey.isDown)
@@ -128,6 +163,7 @@ constructor(scene, x, y, texture, frame)
                 my.sprite.player.anims.play('walk', true);
                 this.walk.startFollow(this, -10, 0);
                 this.walk.start();
+                this.playWalkSound();
             }
         else 
             {
@@ -149,18 +185,18 @@ constructor(scene, x, y, texture, frame)
         if(this.wasAirborne && this.body.blocked.down)
             {
                 this.jump.stop();
-                this.stretchAndSquash();
+                this.squashAndStretch();
+                this.scene.sound.play("soundLand", {volume: 0.1});
                 this.wasAirborne = false;
             }
 
         if(this.body.blocked.down && Phaser.Input.Keyboard.JustDown(this.wKey)) 
             {
                 this.body.setVelocityY(this.JUMP_VELOCITY);
-                this.squashAndStretch();
+                this.stretchAndSquash();
+                this.scene.sound.play("soundJump", {volume: 0.1});
                 this.wasAirborne = true;
             }
-
-        //handle health
 
 
     }
