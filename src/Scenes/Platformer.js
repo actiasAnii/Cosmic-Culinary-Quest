@@ -55,7 +55,7 @@ class Platformer extends Phaser.Scene {
         });
 
         //set up background
-        this.skyBackground = this.add.tileSprite(0, -85, this.map.widthInPixels, this.map.heightInPixels, 'background');
+        this.skyBackground = this.add.tileSprite(0, -50, this.map.widthInPixels, this.map.heightInPixels, 'background');
         this.skyBackground.setOrigin(0, 0).setDepth(-100).setScale(4).setScrollFactor(0.1, 1);
 
         //create health bar
@@ -258,7 +258,8 @@ class Platformer extends Phaser.Scene {
 
         /////////set up player
         //change to player class in a sec
-        my.sprite.player = new Player(this, this.currRespawnX, this.currRespawnY - 150, "platformer_characters", "tile_0006.png");
+        //my.sprite.player = new Player(this, this.currRespawnX, this.currRespawnY - 150, "platformer_characters", "tile_0006.png"); 
+        my.sprite.player = new Player(this, 1200, - 150, "platformer_characters", "tile_0006.png"); //debug
 
 
         //adjust camera settings

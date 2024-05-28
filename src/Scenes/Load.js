@@ -13,9 +13,12 @@ class Load extends Phaser.Scene {
 
         //load tilemap information
         //make sure names are appropriate
-        this.load.image("general_tiles", "tilemap_packed.png"); // Packed tilemap
-        this.load.image("farm_tiles", "tilemap-farm_packed.png"); // Packed tilemap
-        this.load.tilemapTiledJSON("level", "Level.tmj");// Tilemap in JSON
+        this.load.image("general_tiles", "tilemap_packed.png");
+        this.load.image("farm_tiles", "tilemap-farm_packed.png");
+        this.load.image("character_tiles", "tilemap-characters_packed01.png");
+        this.load.tilemapTiledJSON("level", "Level.tmj");//level tilemap in JSON
+        this.load.tilemapTiledJSON("winScreen", "WinScreen.tmj"); //win screen tilemap in JSON
+        this.load.tilemapTiledJSON("loseScreen", "LoseScreen.tmj"); //lose screen tilemap in JSON
 
         // Load the tilemaps as a spritesheet
         this.load.spritesheet("general_sheet", "tilemap_packed.png", {
@@ -93,6 +96,20 @@ class Load extends Phaser.Scene {
             frames: [
                 { frame: "tile_0007.png" }
             ],
+        });
+
+        this.anims.create({
+            key: 'sillyJump',
+            defaultTextureKey: "platformer_characters",
+            frames: this.anims.generateFrameNames('platformer_characters', {
+                prefix: "tile_",
+                start: 6,
+                end: 7,
+                suffix: ".png",
+                zeroPad: 4
+            }),
+            frameRate: 2,
+            repeat: -1
         });
 
 
