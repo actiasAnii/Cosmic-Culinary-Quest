@@ -123,21 +123,30 @@ class Platformer extends Phaser.Scene {
             key: "farm_sheet",
             frame: 4
         });
-
         this.physics.world.enable(this.pumpkin, Phaser.Physics.Arcade.STATIC_BODY);
 
-        //set spawn point
+        //set starting spawn point
         this.spawnPoint = this.map.findObject("Respawns", obj => obj.name === "spawn");
+        this.currRespawnX = this.spawnPoint.x;
+        this.currRespawnY = this.spawnPoint.y;
+        //create group of all respawn points
+        this.respawns = this.map.createFromObjects("Respawns", {
+            name: "respawn",
+            key: "general_sheet",
+            frame: 111
+        });
+        this.physics.world.enable(this.respawns, Phaser.Physics.Arcade.STATIC_BODY); //enable physics
 
         //create camera
         this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
 
         /////////set up player
         //change to player class in a sec
-        my.sprite.player = new Player(this, this.spawnPoint.x, this.spawnPoint.y - 150, "platformer_characters", "tile_0006.png");
+        my.sprite.player = new Player(this, this.currRespawnX, this.currRespawnY - 150, "platformer_characters", "tile_0006.png");
+
 
         //adjust camera settings
-        this.cameras.main.startFollow(my.sprite.player, true, 0.1, 0.025); // (target, [,roundPixels][,lerpX][,lerpY])
+        this.cameras.main.startFollow(my.sprite.player, true, 0.1, 0.08); // (target, [,roundPixels][,lerpX][,lerpY])
         this.cameras.main.setDeadzone(50, 50);
         this.cameras.main.setZoom(this.SCALE);
 
@@ -152,6 +161,17 @@ class Platformer extends Phaser.Scene {
         my.scoreDisplay = this.add.bitmapText(390, 230, "thick", ("00000" + myScore)
         .slice(-5)).setOrigin(1).setScale(2.5).setLetterSpacing(1);
         my.scoreDisplay.setScrollFactor(0);
+
+         //handle collision for respawn points
+         this.physics.add.overlap(my.sprite.player, this.respawns, (player, respawnPoint) => {
+            // Play a sound effect
+
+            //debug
+            console.log("Checkpoint reached!");
+            console.log("Respawn point coordinates:", respawnPoint.x, respawnPoint.y);
+            this.currRespawnX = respawnPoint.x;
+            this.currRespawnY = respawnPoint.y;
+        });
 
 
         //handle collision for collectibles
@@ -183,10 +203,10 @@ class Platformer extends Phaser.Scene {
     }
 
     DEATH()
-    { //UGHHHHH
+    { 
         return (player) => {
-            player.body.x = this.spawnPoint.x;
-            player.body.y = this.spawnPoint.y - 150;
+            player.body.x = this.currRespawnX;
+            player.body.y = this.currRespawnY - 150;
             player.body.setVelocity(0, 0);
         };
     }
@@ -195,6 +215,8 @@ class Platformer extends Phaser.Scene {
     {
         //call update on player to handle player behavior
         my.sprite.player.update();
+
+        //debug
 
         //handle respawning
 

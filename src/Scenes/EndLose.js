@@ -1,7 +1,7 @@
-class EndWin extends Phaser.Scene {
+class EndLose extends Phaser.Scene {
     constructor() 
     {
-        super("endWin");
+        super("endLose");
     }
 
     create()
@@ -21,10 +21,10 @@ class EndWin extends Phaser.Scene {
         }
 
         //display text
-        my.text.won = this.add.bitmapText(game.config.width/2, game.config.height/2 - 250, "thick", "YOU WON!").setOrigin(0.5).setScale(4);
-        my.text.reportScoreW = this.add.bitmapText(game.config.width/2, game.config.height/2 - 50, "thick", "YOUR SCORE: " + ("00000" + myScore).slice(-5)).setOrigin(0.5).setScale(2.5);
-        my.text.reportHighScoreW = this.add.bitmapText(game.config.width/2, game.config.height/2 + 50, "thick", "HIGH SCORE: " + ("00000" + highScore).slice(-5)).setOrigin(0.5).setScale(2.5);
-        my.text.playAgainW = this.add.bitmapText(game.config.width/2, game.config.height/2 + 200, "thick", "press R to play again!").setOrigin(0.5).setScale(2.5);
+        my.text.lost = this.add.bitmapText(game.config.width/2, game.config.height/2 - 250, "thick", "YOU WON!").setOrigin(0.5).setScale(4);
+        my.text.reportScoreL = this.add.bitmapText(game.config.width/2, game.config.height/2 - 50, "thick", "YOUR SCORE: " + ("00000" + myScore).slice(-5)).setOrigin(0.5).setScale(2.5);
+        my.text.reportHighScoreL = this.add.bitmapText(game.config.width/2, game.config.height/2 + 50, "thick", "HIGH SCORE: " + ("00000" + highScore).slice(-5)).setOrigin(0.5).setScale(2.5);
+        my.text.playAgainL = this.add.bitmapText(game.config.width/2, game.config.height/2 + 200, "thick", "press R to play again!").setOrigin(0.5).setScale(2.5);
 
     }
 
