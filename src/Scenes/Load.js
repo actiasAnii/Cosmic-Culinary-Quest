@@ -46,6 +46,7 @@ class Load extends Phaser.Scene {
         this.load.bitmapFont("thick", "thick_8x8.png", "thick_8x8.xml");
 
         //load audio
+        
 
 
     }
