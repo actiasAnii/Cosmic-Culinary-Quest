@@ -101,7 +101,13 @@ constructor(scene, x, y, texture, frame)
         });
     }
 
+    DEATH(spawnX, spawnY)
+    {
+        console.log("water collided!")
+        this.setPosition(spawnX, spawnY);
+        this.body.setVelocity(0);
 
+    }
 
     update()
     {

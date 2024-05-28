@@ -1,3 +1,5 @@
+highScore = 0;
+myScore = 0;
 class Platformer extends Phaser.Scene {
     constructor() {
         super("somethingFresh");
@@ -15,7 +17,7 @@ class Platformer extends Phaser.Scene {
 
     create() 
     {
-        
+
         ////////set up map
         this.map = this.add.tilemap("level", 18, 18, 180, 30);
 
@@ -30,16 +32,21 @@ class Platformer extends Phaser.Scene {
         this.groundLayer = this.map.createLayer("Ground-n-Platforms", [this.general_tileset, this.farm_tileset], 0, 0);
         this.decorationLayer = this.map.createLayer("Decoration", [this.general_tileset, this.farm_tileset], 0, 0);
 
+        //filter water tiles
+        this.water = this.map.createLayer("Water", [this.general_tileset, this.farm_tileset], 0, 0);
+
         //make ground layer collidable
         this.groundLayer.setCollisionByProperty({
             collides: true
         });
 
+        this.water.setCollisionByProperty({
+            water: true
+        });
+
         //set up background
         this.skyBackground = this.add.tileSprite(0, -85, this.map.widthInPixels, this.map.heightInPixels, 'background');
         this.skyBackground.setOrigin(0, 0).setDepth(-100).setScale(4).setScrollFactor(0.1, 1);
-
-
 
 
         /////////create objects and group them
@@ -130,30 +137,39 @@ class Platformer extends Phaser.Scene {
         my.sprite.player = new Player(this, this.spawnPoint.x, this.spawnPoint.y - 150, "platformer_characters", "tile_0006.png");
 
         //adjust camera settings
-        this.cameras.main.startFollow(my.sprite.player, true, 0.25, 0.1); // (target, [,roundPixels][,lerpX][,lerpY])
+        this.cameras.main.startFollow(my.sprite.player, true, 0.1, 0.025); // (target, [,roundPixels][,lerpX][,lerpY])
         this.cameras.main.setDeadzone(50, 50);
         this.cameras.main.setZoom(this.SCALE);
 
         //ground collision handling
         this.physics.add.collider(my.sprite.player, this.groundLayer);
 
+        //water collision handling
+        this.physics.add.collider(my.sprite.player, this.water, this.DEATH());
+
 
         //set up display text
-        this.score = 0;
-        my.scoreDisplay = this.add.bitmapText(390, 230, "thick", ("00000" + this.score)
+        my.scoreDisplay = this.add.bitmapText(390, 230, "thick", ("00000" + myScore)
         .slice(-5)).setOrigin(1).setScale(2.5).setLetterSpacing(1);
         my.scoreDisplay.setScrollFactor(0);
 
-        //change forEach to get children
-        for (let collectibleGroup of my.collectibles.getChildren()) {
+
+        //handle collision for collectibles
+        for (let collectibleGroup of my.collectibles.getChildren()) 
+            {
                 this.physics.add.overlap(my.sprite.player, collectibleGroup, (player, collectible) => {
-                    console.log("item collection detected");
-                    this.score += my.pointVals[collectible.name]; //handle varying point vals not working
-                    //update score text
-                    my.scoreDisplay.setText(("00000" + this.score).slice(-5));
-                    collectible.destroy(); //remove coin on overlap
+
+                    myScore += my.pointVals[collectible.name]; //handle varying point vals
+                    my.scoreDisplay.setText(("00000" + myScore).slice(-5));  //update score text
+                    collectible.destroy(); //remove collectivle on overlap
                 });
             }
+
+        //handle end of game scenario
+        this.physics.add.overlap(my.sprite.player, this.pumpkin, (player, pumpkin) => {
+            console.log("end scene started!")
+            this.scene.start("endWin");
+        });
 
 
         //debug listener
@@ -162,6 +178,17 @@ class Platformer extends Phaser.Scene {
             this.physics.world.debugGraphic.clear()
         }, this);
 
+        //start game
+        this.init_game();
+    }
+
+    DEATH()
+    { //UGHHHHH
+        return (player) => {
+            player.body.x = this.spawnPoint.x;
+            player.body.y = this.spawnPoint.y - 150;
+            player.body.setVelocity(0, 0);
+        };
     }
 
     update() 
@@ -173,6 +200,15 @@ class Platformer extends Phaser.Scene {
 
         //end condition
 
+
+
+    }
+
+    //for resetting the level
+    init_game()
+    {
+        myScore = 0;
+        my.scoreDisplay.setText(("00000" + myScore).slice(-5));
 
 
     }
