@@ -1,3 +1,4 @@
+//class load. used for preloading assets some animations
 class Load extends Phaser.Scene {
     constructor() {
         super("loadScene");
@@ -5,17 +6,16 @@ class Load extends Phaser.Scene {
 
     preload() {
 
-        //set path for rest of assets
+        //set path for assets
         this.load.setPath("./assets/");
 
         //load characters spritesheet
         this.load.atlas("platformer_characters", "tilemap-characters-packed.png", "tilemap-characters-packed.json");
 
         //load tilemap information
-        //make sure names are appropriate
-        this.load.image("general_tiles", "tilemap_packed.png");
-        this.load.image("farm_tiles", "tilemap-farm_packed.png");
-        this.load.image("character_tiles", "tilemap-characters_packed01.png");
+        this.load.image("general_tiles", "tilemap_packed.png"); //holds pixel platformer tile assets
+        this.load.image("farm_tiles", "tilemap-farm_packed.png"); //holds farm expansion tile assets
+        this.load.image("character_tiles", "tilemap-characters_packed01.png"); //holds pixel platformer character assets
         this.load.tilemapTiledJSON("level", "Level.tmj");//level tilemap in JSON
         this.load.tilemapTiledJSON("winScreen", "WinScreen.tmj"); //win screen tilemap in JSON
         this.load.tilemapTiledJSON("loseScreen", "LoseScreen.tmj"); //lose screen tilemap in JSON
@@ -36,15 +36,15 @@ class Load extends Phaser.Scene {
         //multiatlas ripped from improved platformer
         this.load.multiatlas("kenny-particles", "kenny-particles.json");
 
-        //load the rotates particles
+        //load the rotated particles because not in atlas particles
         this.load.image("trace1", "trace_06_rotated.png");
         this.load.image("trace2", "trace_07_rotated.png");
 
-        //load health bar
+        //load health bar assets
         this.load.image("heartEmpty", "heart_empty.png");
         this.load.image("heartFull", "heart_full.png");
 
-        //load background
+        //load background asset
         this.load.image("background", "background.png");
 
         //load font
@@ -65,9 +65,11 @@ class Load extends Phaser.Scene {
     }
 
     create() {
-        //create animations
+        ///////////create animations
 
         /////player animations
+
+        //walking animation
         this.anims.create({
             key: 'walk',
             frames: this.anims.generateFrameNames('platformer_characters', {
@@ -81,6 +83,7 @@ class Load extends Phaser.Scene {
             repeat: -1
         });
 
+        //idle animation
         this.anims.create({
             key: 'idle',
             defaultTextureKey: "platformer_characters",
@@ -90,6 +93,7 @@ class Load extends Phaser.Scene {
             repeat: -1
         });
 
+        //jump animation
         this.anims.create({
             key: 'jump',
             defaultTextureKey: "platformer_characters",
@@ -98,6 +102,7 @@ class Load extends Phaser.Scene {
             ],
         });
 
+        //silly jump animation (used during win screen)
         this.anims.create({
             key: 'sillyJump',
             defaultTextureKey: "platformer_characters",
@@ -113,7 +118,9 @@ class Load extends Phaser.Scene {
         });
 
 
-        ////object animations
+        /////object animations
+
+        //flag waving animation
         this.anims.create({
             key: 'flagWave',
             frames: [
@@ -121,9 +128,10 @@ class Load extends Phaser.Scene {
                 { key: 'general_sheet', frame: 112 }
             ],
             frameRate: 4, 
-            repeat: -1 // Repeat indefinitely
+            repeat: -1
         });
 
+        //radish object animation
         this.anims.create({
             key: 'radishPeep',
             frames: [
@@ -131,9 +139,10 @@ class Load extends Phaser.Scene {
                 { key: 'farm_sheet', frame: 43 }
             ],
             frameRate: 1, 
-            repeat: -1 // Repeat indefinitely
+            repeat: -1
         });
 
+        //carrot object animation
         this.anims.create({
             key: 'carrotPeep',
             frames: [
@@ -141,7 +150,7 @@ class Load extends Phaser.Scene {
                 { key: 'farm_sheet', frame: 72 }
             ],
             frameRate: 2, 
-            repeat: -1 // Repeat indefinitely
+            repeat: -1
         });
 
 
@@ -153,6 +162,8 @@ class Load extends Phaser.Scene {
 
 
     //never reached
-    update() {
+    update() 
+    {
+        
     }
 }

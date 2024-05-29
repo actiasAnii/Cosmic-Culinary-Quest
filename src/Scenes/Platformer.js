@@ -1,5 +1,8 @@
+//global variables holding current score and high score, displayed on end/win screens
 highScore = 0;
 myScore = 0;
+
+//main gameplay scene
 class Platformer extends Phaser.Scene {
     constructor() {
         super("somethingFresh");
@@ -7,8 +10,7 @@ class Platformer extends Phaser.Scene {
 
     init() 
     {
-        //variables and settings
-        //mess around with them
+        //basic settings
         this.physics.world.gravity.y = 1500;
         this.physics.world.bounds.width = 3240;
         this.physics.world.bounds.height = 540;
@@ -27,13 +29,15 @@ class Platformer extends Phaser.Scene {
 
     create() 
     {
+        //set html description
+        document.getElementById('description').innerHTML = '<h2>Intergalactics & Gastronomy: Cosmic Culinary Quest</h2><br>A: left // D: right // W: jump //SHIFT: crouch'
 
-        ////////set up map
+        /////////set up map
         this.map = this.add.tilemap("level", 18, 18, 180, 30);
 
         //add tilesets to map
-        // First parameter: name we gave the tileset in Tiled
-        // Second parameter: key for the tilesheet (from this.load.image in Load.js)
+        //first parameter: name we gave the tileset in Tiled
+        //second parameter: key for the tilesheet
         this.general_tileset = this.map.addTilesetImage("tilemap_packed", "general_tiles");
         this.farm_tileset = this.map.addTilesetImage("tilemap-farm_packed", "farm_tiles");
 
@@ -41,8 +45,6 @@ class Platformer extends Phaser.Scene {
         this.placementsLayer = this.map.createLayer("Objects-Placement", [this.general_tileset, this.farm_tileset], 0, 0);
         this.groundLayer = this.map.createLayer("Ground-n-Platforms", [this.general_tileset, this.farm_tileset], 0, 0);
         this.decorationLayer = this.map.createLayer("Decoration", [this.general_tileset, this.farm_tileset], 0, 0);
-
-        //filter water tiles
         this.water = this.map.createLayer("Water", [this.general_tileset, this.farm_tileset], 0, 0);
 
         //make ground layer collidable
@@ -50,6 +52,7 @@ class Platformer extends Phaser.Scene {
             collides: true
         });
 
+        //make water collidable
         this.water.setCollisionByProperty({
             water: true
         });
@@ -83,7 +86,7 @@ class Platformer extends Phaser.Scene {
 
 
         /////////create objects and group them
-        my.collectibles = this.add.group(); //initialize phaser group of all collectibles
+        my.collectibles = this.add.group(); //initialize phaser group of all the collectibles
 
         //flowers
         this.flowers = this.map.createFromObjects("Objects", { //create
@@ -91,13 +94,15 @@ class Platformer extends Phaser.Scene {
             key: "farm_sheet",
             frame: 20
         });
+
         this.physics.world.enable(this.flowers, Phaser.Physics.Arcade.STATIC_BODY); //enable physics
-        //play flower animation
+        
+        //flower animation
         this.flowers.forEach(flower => {
             this.tweens.add({
                 targets: flower,
                 scaleY: 1.1, //stretch vertically just a tiny bit to look like blooming
-                angle: 1.5,
+                angle: 1.5, //change angle, like blowing a bit in the wind
                 duration: 1000, 
                 ease: 'Sine.EaseInOut',
                 yoyo: true,
@@ -118,11 +123,13 @@ class Platformer extends Phaser.Scene {
             frame: 58
         });
         this.physics.world.enable(this.wheats, Phaser.Physics.Arcade.STATIC_BODY); //enable physics
+        
+        //wheat animation
         this.wheats.forEach(wheat => {
             this.tweens.add({
                 targets: wheat,
-                scaleY: 1.2, //stretch
-                angle: 3,
+                scaleY: 1.2, //stretch for blowing in wind effect
+                angle: 3, //angle for blowing in wind effect
                 duration: 600, 
                 ease: 'Sine.EaseInOut',
                 yoyo: true,
@@ -143,7 +150,7 @@ class Platformer extends Phaser.Scene {
         });
         this.physics.world.enable(this.radishes, Phaser.Physics.Arcade.STATIC_BODY); //enable physics
 
-        //play radish animation
+        //radish animation
         this.radishes.forEach(radish => {
             radish.anims.play('radishPeep');
         });
@@ -157,11 +164,10 @@ class Platformer extends Phaser.Scene {
         });
         this.physics.world.enable(this.carrots, Phaser.Physics.Arcade.STATIC_BODY); //enable physics
 
-        //play carrot animation
+        //carrot animation
         this.carrots.forEach(carrot => {
             carrot.anims.play('carrotPeep');
         });
-
         my.carrotGroup = this.add.group(this.carrots); //add to a group
 
         //tomatoes
@@ -171,12 +177,13 @@ class Platformer extends Phaser.Scene {
             frame: 57
         });
         this.physics.world.enable(this.tomatoes, Phaser.Physics.Arcade.STATIC_BODY); //enable physics
+
         //tomato animation
         this.tomatoes.forEach(tomato => {
             this.tweens.add({
                 targets: tomato,
                 scaleX: 1.2,
-                scaleY: 0.9,
+                scaleY: 0.9, //squash a bit to look bouncy
                 duration: 650, 
                 ease: 'Sine.EaseInOut',
                 yoyo: true,
@@ -196,12 +203,13 @@ class Platformer extends Phaser.Scene {
             frame: 59
         });
         this.physics.world.enable(this.corn, Phaser.Physics.Arcade.STATIC_BODY); //enable physics
+
         //corn animation
         this.corn.forEach(corn => {
             this.tweens.add({
                 targets: corn,
-                scaleX: 1.25,
-                scaleY: 1.2, //stretch
+                scaleX: 1.25, //expand to look like growing
+                scaleY: 1.2,
                 duration: 1200, 
                 ease: 'Sine.EaseInOut',
                 yoyo: true,
@@ -215,14 +223,15 @@ class Platformer extends Phaser.Scene {
         my.cornGroup = this.add.group(this.corn); //add to a group
 
         //add all score objects to collectible group
-        my.collectibles.addMultiple([my.wheatGroup, my.flowerGroup, my.tomatoGroup, my.cornGroup, my.radishGroup, my.carrotGroup]);
+        my.collectibles.addMultiple([my.wheatGroup, my.flowerGroup, my.tomatoGroup, my.cornGroup, my.carrotGroup, my.radishGroup]);
+        //dictionary to hold point value of each collectible type
         my.pointVals = {
-            "wheat": 10,
-            "flower": 15,
-            "tomato": 20,
-            "corn": 25,
-            "radish": 30,
-            "carrot": 35
+            "wheat": 5,
+            "flower": 10,
+            "tomato": 15,
+            "corn": 20,
+            "carrot": 25,
+            "radish": 30
           };
 
         //create pumpkin
@@ -235,31 +244,28 @@ class Platformer extends Phaser.Scene {
 
         //set starting spawn point
         this.spawnPoint = this.map.findObject("Respawns", obj => obj.name === "spawn");
+        //variables to hold current x and y spawns, update based on checkpoints reached
         this.currRespawnX = this.spawnPoint.x;
         this.currRespawnY = this.spawnPoint.y;
 
-
-        //create group of all respawn points
+        //create group of all checkpoints
         this.respawns = this.map.createFromObjects("Respawns", {
             name: "respawn",
             key: "general_sheet",
             frame: 111
         });
 
-        //play flag wave animation
+        //play flag wave animation on checkpoints
         this.respawns.forEach(respawn => {
             respawn.anims.play('flagWave');
             });
+        this.physics.world.enable(this.respawns, Phaser.Physics.Arcade.STATIC_BODY); //checkpoints are collidable
 
-        this.physics.world.enable(this.respawns, Phaser.Physics.Arcade.STATIC_BODY); //enable physics
-
-        //create camera
+        ////create camera
         this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
 
         /////////set up player
-        //change to player class in a sec
-        //my.sprite.player = new Player(this, this.currRespawnX, this.currRespawnY - 150, "platformer_characters", "tile_0006.png"); 
-        my.sprite.player = new Player(this, 1200, - 150, "platformer_characters", "tile_0006.png"); //debug
+        my.sprite.player = new Player(this, this.currRespawnX, this.currRespawnY - 150, "platformer_characters", "tile_0006.png"); 
 
 
         //adjust camera settings
@@ -267,21 +273,24 @@ class Platformer extends Phaser.Scene {
         this.cameras.main.setDeadzone(50, 50);
         this.cameras.main.setZoom(this.SCALE);
 
-        //ground collision handling
-        this.physics.add.collider(my.sprite.player, this.groundLayer);
-
-        //water collision handling
-        this.physics.add.collider(my.sprite.player, this.water, this.DEATH());
-
 
         //set up display text
         my.scoreDisplay = this.add.bitmapText(390, 230, "thick", ("00000" + myScore)
         .slice(-5)).setOrigin(1).setScale(2.5).setLetterSpacing(1);
         my.scoreDisplay.setScrollFactor(0);
 
-         //handle collision for respawn points
-         this.physics.add.overlap(my.sprite.player, this.respawns, (player, respawnPoint) => {
 
+        ///////collision handling
+
+        //handle collision with the ground
+        this.physics.add.collider(my.sprite.player, this.groundLayer);
+
+        //handle collision with water
+        this.physics.add.collider(my.sprite.player, this.water, this.DEATH());
+
+         ///handle collision with respawn points
+         this.physics.add.overlap(my.sprite.player, this.respawns, (player, respawnPoint) => {
+            //set the current respawn point to the position of this checkpoint
             this.currRespawnX = respawnPoint.x;
             this.currRespawnY = respawnPoint.y;
             this.sound.play("soundCheckpoint", {volume: 0.08});
@@ -289,7 +298,7 @@ class Platformer extends Phaser.Scene {
         });
 
 
-        //handle collision for collectibles
+        //handle collision with collectibles
         for (let collectibleGroup of my.collectibles.getChildren()) 
             {
                 this.physics.add.overlap(my.sprite.player, collectibleGroup, (player, collectible) => {
@@ -301,43 +310,45 @@ class Platformer extends Phaser.Scene {
                 });
             }
 
-        //handle end of game scenario
+        //handle collision with pumpkin -> end of game scenario
         this.physics.add.overlap(my.sprite.player, this.pumpkin, (player, pumpkin) => {
+            myScore += 500;
             this.sound.play("soundWin", {volume: 0.08});
             this.scene.start("endWin");
         });
-
 
         //debug listener
         this.input.keyboard.on('keydown-O', () => {
             this.physics.world.drawDebug = this.physics.world.drawDebug ? false : true
             this.physics.world.debugGraphic.clear()
         }, this);
+        this.physics.world.drawDebug = false;
 
         //start game
         this.init_game();
-
+        //start tile animations
         this.animatedTiles.init(this.map);
     }
 
     DEATH()
     { 
         return (player) => {
-            //adjust player position
+            //move player to last respawn point
             player.body.x = this.currRespawnX;
-            player.body.y = this.currRespawnY - 150;
+            player.body.y = this.currRespawnY - 100;
             //make player stop moving
             player.body.setVelocity(0, 0);
             //reduce player health
             player.HEALTH--;
             this.sound.play("soundDrown", {volume: 0.08});
 
-            if (player.HEALTH <= 0)
+            if (player.HEALTH <= 0) //if player has no more health -> game lose scenario
                 {
                     this.sound.play("soundLose", {volume: 0.08});
                     this.scene.start("endLose");      
                 }
-
+            
+            //update health bar
             for (let i = 0; i < 3; i++) 
                 {
 
@@ -350,23 +361,18 @@ class Platformer extends Phaser.Scene {
 
     update() 
     {
-        //call update on player to handle player behavior
+        //call update on player to handle player movement
         my.sprite.player.update();
 
-        //debug
-
-        //handle respawning
-
-        //end condition
-
-
+        //collision and such all handled with overlaps and colliders
 
     }
 
     //for resetting the level
     init_game()
     {
-        myScore = 0;
+        //reset score
+        myScore = 0; 
         my.scoreDisplay.setText(("00000" + myScore).slice(-5));
 
 

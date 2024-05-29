@@ -1,13 +1,26 @@
-// Jim Whitehead
-// Created: 4/14/2024
+// Anais Montes
+// Created: 05/2024
 // Phaser: 3.70.0
 //
-// Cubey
 //
-// An example of putting sprites on the screen using Phaser
-// 
-// Art assets from Kenny Assets "Shape Characters" set:
-// https://kenney.nl/assets/shape-characters
+//
+//Intergalactics and Gastronomy: Cosmic Culinary Quest
+//
+//
+//Credits: 
+
+//art:
+//- Kenny Pixel Platformer (https://kenney.nl/assets/pixel-platformer)
+//- Kenny Pixel Platformer Farm Expansion (https://kenney.nl/assets/pixel-platformer-farm-expansion)
+//- + use of Phaser Animated Tiles plugin (https://github.com/nkholski/phaser-animated-tiles)
+//
+//audio:
+//- Kenny Sci Fi Sounds (https://kenney.nl/assets/sci-fi-sounds)
+//- Kenny Music Jingles (https://kenney.nl/assets/music-jingles)
+//- Kenny Impact Sounds (https://kenney.nl/assets/impact-sounds)
+//
+//font:
+//FrostyFreeze Public Domain Bitmap Thick 8x8 (https://frostyfreeze.itch.io/pixel-bitmap-fonts-png-xml)
 
 // debug with extreme prejudice
 "use strict"
@@ -18,7 +31,7 @@ let config = {
     type: Phaser.CANVAS,
     render: {
         pixelArt: true,  // prevent pixel art from getting blurred when scaled
-        antialias: false,
+        antialias: false, //prevent that weird jitter when player moves fast
     },
     physics: {
         default: 'arcade',
@@ -32,7 +45,7 @@ let config = {
         }
     },
     width: 1080,
-    height: 750, //adjust back when on pc
+    height: 750,
     scene: [Load, Platformer, EndWin, EndLose]
 }
 

@@ -12,11 +12,13 @@ class EndLose extends Phaser.Scene {
 
     create()
     {
+        ////////set up map
+
         //simple background
         this.skyBackground = this.add.tileSprite(-440, -40, game.config.width, game.config.height, 'background');
         this.skyBackground.setOrigin(0, 0).setDepth(-100).setScale(5);
 
-        ////////set up map
+
         this.map = this.add.tilemap("loseScreen", 18, 18, 60, 35);
 
         //create camera
@@ -24,8 +26,6 @@ class EndLose extends Phaser.Scene {
         this.cameras.main.setZoom(1.2).setPosition(0, 0);
 
         //add tilesets to map
-        // First parameter: name we gave the tileset in Tiled
-        // Second parameter: key for the tilesheet (from this.load.image in Load.js)
         this.general_tileset = this.map.addTilesetImage("tilemap_packed", "general_tiles");
         this.farm_tileset = this.map.addTilesetImage("tilemap-farm_packed", "farm_tiles");
 
@@ -46,12 +46,13 @@ class EndLose extends Phaser.Scene {
         my.text.reportHighScoreL = this.add.bitmapText(game.config.width/2, game.config.height/2 + 10, "thick", "HIGH SCORE: " + ("00000" + highScore).slice(-5)).setOrigin(0.5).setScale(2.5);
         my.text.playAgainL = this.add.bitmapText(game.config.width/2, game.config.height/2 + 160, "thick", "press R to play again!").setOrigin(0.5).setScale(2.5);
 
+        //start tile animations
         this.animatedTiles.init(this.map);
     }
 
     update()
     {
-        //if restart key is pressed, go back to gameplay scene
+        //if restart key is pressed, return to gameplay scene
         if (Phaser.Input.Keyboard.JustDown(this.restart)) {
             this.scene.start("somethingFresh");
         }
